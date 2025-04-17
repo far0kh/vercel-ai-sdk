@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+}
+
+@font-face {
+    font-family: "uncut sans";
+    src: url("./uncut-sans.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-Thin.ttf") format("trueType");
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-ExtraLight.ttf") format("trueType");
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-Light.ttf") format("trueType");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-Regular.ttf") format("trueType");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-Medium.ttf") format("trueType");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-SemiBold.ttf") format("trueType");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-Bold.ttf") format("trueType");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-ExtraBold.ttf") format("trueType");
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: "vazirmatn";
+    src: url("./fonts/Vazirmatn-Black.ttf") format("trueType");
+    font-weight: 900;
+}
+
+* {
+    font-family: "vazirmatn", "uncut sans", sans-serif;
+    font-weight: 200;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
