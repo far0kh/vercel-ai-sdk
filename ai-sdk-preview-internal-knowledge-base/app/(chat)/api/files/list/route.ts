@@ -15,6 +15,7 @@ export async function GET() {
   }
 
   const { blobs } = await list({ prefix: user.email! });
+  console.log('blobs', blobs);
 
   return Response.json(
     blobs.map((blob) => ({

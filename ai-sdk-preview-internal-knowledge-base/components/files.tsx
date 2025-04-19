@@ -1,5 +1,3 @@
-"use client";
-
 import useSWR from "swr";
 import {
   CheckedSquare,
@@ -139,9 +137,9 @@ export const Files = ({
           ) : null}
 
           {!isLoading &&
-          files?.length === 0 &&
-          uploadQueue.length === 0 &&
-          deleteQueue.length === 0 ? (
+            files?.length === 0 &&
+            uploadQueue.length === 0 &&
+            deleteQueue.length === 0 ? (
             <div className="flex flex-col gap-4 items-center justify-center h-full">
               <div className="flex flex-row gap-2 items-center text-zinc-500 dark:text-zinc-400 text-sm">
                 <InfoIcon />
@@ -153,11 +151,10 @@ export const Files = ({
           {files?.map((file: any) => (
             <div
               key={file.pathname}
-              className={`flex flex-row p-2 border-b dark:border-zinc-700 ${
-                selectedFilePathnames.includes(file.pathname)
+              className={`flex flex-row p-2 border-b dark:border-zinc-700 ${selectedFilePathnames.includes(file.pathname)
                   ? "bg-zinc-100 dark:bg-zinc-700 dark:border-zinc-600"
                   : ""
-              }`}
+                }`}
             >
               <div
                 className="flex flex-row items-center justify-between w-full gap-4"

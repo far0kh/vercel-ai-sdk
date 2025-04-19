@@ -30,6 +30,7 @@
     "framer-motion": "^11.3.19",
     "next": "15.0.0-canary.152",
     "next-auth": "5.0.0-beta.21",
+    "pdf-io": "^1.0.21",
     "pdf-parse": "^1.1.1",
     "postgres": "^3.4.4",
     "react": "19.0.0-rc-7771d3a7-20240827",
@@ -40,7 +41,12 @@
     "swr": "^2.2.5",
     "use-local-storage": "^3.0.0",
     "usehooks-ts": "^3.1.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "pako": "^1.0.10",
+    "pdf-lib": "^0.6.1",
+    "pdfjs-dist": "^3.8.162",
+    "pngjs": "^7.0.0",
+    "rimraf": "^5.0.1"
   },
   "devDependencies": {
     "@types/d3-scale": "^4.0.8",
@@ -48,6 +54,8 @@
     "@types/pdf-parse": "^1.1.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/pako": "^2.0.0",
+    "@types/pngjs": "^6.0.1",
     "drizzle-kit": "^0.24.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
