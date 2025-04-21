@@ -16,6 +16,7 @@ export default function Home() {
   const [extractedText, setExtractedText] = useState<string>("")
   const [extractedPages, setExtractedPages] = useState<string[]>([])
   const [extractedImages, setExtractedImages] = useState<string[]>([])
+  const [extractedImagesPage, setExtractedImagesPage] = useState<number[]>([])
   const [fileName, setFileName] = useState<string>("")
   const [error, setError] = useState<string | null>(null)
   const [isExtractingPages, setIsExtractingPages] = useState(false)
@@ -130,14 +131,14 @@ export default function Home() {
       for (let i = 1; i <= pdf.numPages; i++) {
         try {
           const page = await pdf.getPage(i)
+          console.log(page);
 
-          // const operatorList = await page.getOperatorList();
+          const operatorList = await page.getOperatorList();
 
-          // const imgIndex = operatorList.fnArray.indexOf(pdfjsLib.OPS.paintImageXObject);
-          // if (imgIndex === -1) {
-          //   // No pages found
-          //   continue;
-          // }
+          const imgIndex = operatorList.fnArray.indexOf(pdfjsLib.OPS.paintImageXObject || pdfjsLib.OPS.paintJpegXObject || pdfjsLib.OPS.paintImageXObjectSMask || pdfjsLib.OPS.paintJpegXObjectSMask);
+          if (imgIndex !== -1) {
+            setExtractedImagesPage((prev) => [...prev, i]);
+          }
           // const imgArgs = operatorList.argsArray[imgIndex];
           // const { data } = await page.objs.get(imgArgs[0]);
           // console.log(data);
@@ -381,7 +382,7 @@ export default function Home() {
                                 />
                               </div>
                               <div className="p-2 bg-gray-50 flex justify-between items-center">
-                                <span className="text-sm text-gray-500">Image {index + 1}</span>
+                                <span className="text-sm text-gray-500">Image {index + 1} - Page {extractedImagesPage[index] || "?"}</span>
                                 <Button
                                   variant="outline"
                                   size="sm"

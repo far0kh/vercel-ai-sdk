@@ -1,5 +1,6 @@
 CREATE TABLE "images" (
 	"id" varchar(191) PRIMARY KEY NOT NULL,
+	"content" text NOT NULL,
 	"title" text NOT NULL,
 	"description" text NOT NULL,
 	"path" text NOT NULL,

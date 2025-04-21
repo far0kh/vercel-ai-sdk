@@ -28,6 +28,7 @@ export function ImageCard({
         className="w-full h-full object-cover transition-transform group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-zinc-900/70 group-hover:opacity-100 opacity-0 transition-opacity flex flex-col items-center justify-center p-6 text-white text-center">
+        <h6 className="text-sm font-normal mb-2 capitalize">{`(${image.content} content)`}</h6>
         <h3 className="text-xl font-semibold">{image.title}</h3>
         <p className="hidden md:block text-sm mt-2 overflow-y-hidden">
           {image.description}

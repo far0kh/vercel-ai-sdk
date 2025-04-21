@@ -6,6 +6,7 @@ import path from "path";
 export type ImageMetadata = {
   path: string;
   metadata: {
+    content: "empty" | "general" | "data";
     title: string;
     description: string;
   };
@@ -24,6 +25,19 @@ export async function getJpgFiles(dir: string): Promise<string[]> {
     const files = await fs.promises.readdir(dir);
     const jpgFiles = files.filter(
       (file) => path.extname(file).toLowerCase() === ".jpg",
+    );
+    return jpgFiles;
+  } catch (error) {
+    console.error("Error reading directory:", error);
+    throw error; // Re-throw the error for further handling if necessary
+  }
+}
+
+export async function getImageFiles(dir: string): Promise<string[]> {
+  try {
+    const files = await fs.promises.readdir(dir);
+    const jpgFiles = files.filter(
+      (file) => [".jpg", ".jpeg", ".png", ".gif"].includes(path.extname(file).toLowerCase()),
     );
     return jpgFiles;
   } catch (error) {

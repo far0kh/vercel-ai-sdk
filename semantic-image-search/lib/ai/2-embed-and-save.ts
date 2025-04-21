@@ -26,7 +26,7 @@ async function main() {
   const imagesWithMetadata = await getMetadataFile("images-with-metadata.json");
 
   // map over it and embed each .metadata key
-  for (const image of imagesWithMetadata) {
+  for (const image of imagesWithMetadata.filter((image) => image.metadata.content !== "empty")) {
     console.clear();
     console.log(
       `Generating embedding for ${image.path} (${imagesWithMetadata.indexOf(image) + 1}/${imagesWithMetadata.length})`,
@@ -45,6 +45,7 @@ async function main() {
     // push to db
     try {
       await saveImage({
+        content: image.metadata.content,
         title: image.metadata.title,
         description: image.metadata.description,
         id: nanoid(),

@@ -9,7 +9,8 @@ dotenv.config();
 
 async function main() {
   const blobs = await list();
-  const files = blobs.blobs.map((b) => b.url);
+
+  const files = blobs.blobs.filter((b) => ['.jpg', '.jpeg', '.png', '.gif'].some((ext) => b.pathname.endsWith(ext))).map((b) => b.url);
 
   console.log("files to process:\n", files);
 
@@ -24,10 +25,9 @@ async function main() {
       model: google('gemini-2.0-flash'),
       schema: z.object({
         image: z.object({
+          content: z.enum(["empty", "general", "data"]).describe("empty if no content or unable to detect, general if general content, data if data"),
           title: z.string().describe("an artistic title for the image"),
-          description: z
-            .string()
-            .describe("A one sentence description of the image"),
+          description: z.string().describe("A one sentence description of the image"),
         }),
       }),
       maxTokens: 512,

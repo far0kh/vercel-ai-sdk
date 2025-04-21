@@ -11,7 +11,7 @@ import {
 import { db } from ".";
 import { DBImage, images } from "./schema";
 import { generateEmbedding } from "../ai/utils";
-import { createClient } from 'redis';
+// import { createClient } from 'redis';
 
 const { embedding: _, ...rest } = getTableColumns(images);
 const imagesWithoutEmbedding = {
@@ -19,7 +19,7 @@ const imagesWithoutEmbedding = {
   embedding: sql<number[]>`ARRAY[]::integer[]`,
 };
 
-const redis = await createClient({ url: process.env.REDIS_URL }).connect();
+// const redis = await createClient({ url: process.env.REDIS_URL }).connect();
 
 export const findSimilarContent = async (description: string) => {
   const embedding = await generateEmbedding(description);
@@ -65,36 +65,38 @@ export const getImages = async (
   query?: string,
 ): Promise<{ images: DBImage[]; error?: Error }> => {
   try {
-    const formattedQuery = query
-      ? "q:" + query?.replaceAll(" ", "_")
-      : "all_images";
+    // const formattedQuery = query
+    //   ? "q:" + query?.replaceAll(" ", "_")
+    //   : "all_images";
 
-    const cached = await redis.get(formattedQuery);
-    if (cached) {
-      const parsed = JSON.parse(cached) as DBImage[];
-      return { images: parsed };
+    // const cached = await redis.get(formattedQuery);
+    let allMatches;
+    if (query === undefined || query.length < 3) {
+      allMatches = await db
+        .select(imagesWithoutEmbedding)
+        .from(images)
+        .limit(20);
     } else {
-      if (query === undefined || query.length < 3) {
-        const allImages = await db
-          .select(imagesWithoutEmbedding)
-          .from(images)
-          .limit(20);
-        await redis.set("all_images", JSON.stringify(allImages));
-        return { images: allImages };
-      } else {
-        const directMatches = await findImageByQuery(query);
-        const semanticMatches = await findSimilarContent(query);
-        const allMatches = uniqueItemsByObject(
-          [...directMatches, ...semanticMatches].map((image) => ({
-            ...image.image,
-            similarity: image.similarity,
-          })),
-        );
-
-        await redis.set(formattedQuery, JSON.stringify(allMatches));
-        return { images: allMatches };
-      }
+      const directMatches = await findImageByQuery(query);
+      const semanticMatches = await findSimilarContent(query);
+      allMatches = uniqueItemsByObject(
+        [...directMatches, ...semanticMatches].map((image) => ({
+          ...image.image,
+          similarity: image.similarity,
+        })),
+      );
     }
+
+
+    // if (cached && cached === JSON.stringify(allMatches)) {
+    //   console.log("cache hit");
+    //   const parsed = JSON.parse(cached) as DBImage[];
+    //   return { images: parsed };
+    // } else {
+    //   console.log("cache miss");
+    //   await redis.set(formattedQuery, JSON.stringify(allMatches));
+    return { images: allMatches };
+    // }
   } catch (e) {
     if (e instanceof Error) return { error: e, images: [] };
     return {

@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { getJpgFiles } from "./utils";
+import { getJpgFiles, getImageFiles } from "./utils";
 import { list, put } from "@vercel/blob";
 import fs from "fs";
 
@@ -7,7 +7,7 @@ dotenv.config();
 
 async function main() {
   const basePath = "images-to-index";
-  const files = await getJpgFiles(basePath);
+  const files = await getImageFiles(basePath);
   const { blobs } = await list();
   console.log(blobs);
 

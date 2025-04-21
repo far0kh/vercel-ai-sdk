@@ -40,20 +40,20 @@ export async function POST(request: Request) {
   for (let i = 0; i < loopCount; i++) {
     const start = i * 100;
     const end = Math.min(start + 100, chunkedContent.length);
-    const chunk = chunkedContent.slice(start, end);
+    const chunks = chunkedContent.slice(start, end);
 
     console.log(`Chunks ${start} to ${end} of ${chunkedContent.length} created.`);
 
     // Embed the chunks
     const { embeddings } = await embedMany({
       model: google.textEmbeddingModel("text-embedding-004"),
-      values: chunk.map((chunk) => chunk.pageContent),
+      values: chunks.map((chunk) => chunk.pageContent),
     });
     console.log(`Chunks ${start} to ${end} of ${chunkedContent.length} embedded.`);
 
     // Insert the chunks into the database
     await insertChunks({
-      chunks: chunk.map((chunk, j) => ({
+      chunks: chunks.map((chunk, j) => ({
         id: `${user.email}/${filename}/${start + j}`,
         filePath: `${user.email}/${filename}`,
         content: chunk.pageContent.replace(/\u0000/g, ''),

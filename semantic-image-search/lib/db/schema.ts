@@ -8,6 +8,7 @@ export const images = pgTable(
     id: varchar("id", { length: 191 })
       .primaryKey()
       .$defaultFn(() => nanoid()),
+    content: text("content").notNull(),
     title: text("title").notNull(),
     description: text("description").notNull(),
     path: text("path").notNull(),
@@ -24,6 +25,7 @@ export const images = pgTable(
 export const dbImageSchema = z.object({
   id: z.string(),
   embedding: z.array(z.number()),
+  content: z.string(),
   title: z.string(),
   path: z.string(),
   description: z.string(),
