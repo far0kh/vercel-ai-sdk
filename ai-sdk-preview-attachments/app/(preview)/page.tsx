@@ -62,7 +62,7 @@ export default function Home() {
       if (files.length > 0) {
         const validFiles = files.filter(
           (file) =>
-            file.type.startsWith("image/") || file.type.startsWith("text/")
+            file.type.startsWith("image/") || file.type.startsWith("text/") || file.type.startsWith("application/")
         );
 
         if (validFiles.length === files.length) {
@@ -70,7 +70,7 @@ export default function Home() {
           validFiles.forEach((file) => dataTransfer.items.add(file));
           setFiles(dataTransfer.files);
         } else {
-          toast.error("Only image and text files are allowed");
+          toast.error("Only image, text and pdf files are allowed");
         }
       }
     }
@@ -93,7 +93,7 @@ export default function Home() {
     if (droppedFilesArray.length > 0) {
       const validFiles = droppedFilesArray.filter(
         (file) =>
-          file.type.startsWith("image/") || file.type.startsWith("text/")
+          file.type.startsWith("image/") || file.type.startsWith("text/") || file.type.startsWith("application/")
       );
 
       if (validFiles.length === droppedFilesArray.length) {
@@ -101,7 +101,7 @@ export default function Home() {
         validFiles.forEach((file) => dataTransfer.items.add(file));
         setFiles(dataTransfer.files);
       } else {
-        toast.error("Only image and text files are allowed!");
+        toast.error("Only image, text and pdf files are allowed!");
       }
 
       setFiles(droppedFiles);
@@ -130,7 +130,7 @@ export default function Home() {
     if (selectedFiles) {
       const validFiles = Array.from(selectedFiles).filter(
         (file) =>
-          file.type.startsWith("image/") || file.type.startsWith("text/")
+          file.type.startsWith("image/") || file.type.startsWith("text/") || file.type.startsWith("application/")
       );
 
       if (validFiles.length === selectedFiles.length) {
@@ -138,7 +138,7 @@ export default function Home() {
         validFiles.forEach((file) => dataTransfer.items.add(file));
         setFiles(dataTransfer.files);
       } else {
-        toast.error("Only image and text files are allowed");
+        toast.error("Only image, text and pdf files are allowed");
       }
     }
   };
@@ -172,9 +172,8 @@ export default function Home() {
             {messages.map((message, index) => (
               <motion.div
                 key={message.id}
-                className={`flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0 ${
-                  index === 0 ? "pt-20" : ""
-                }`}
+                className={`flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0 ${index === 0 ? "pt-20" : ""
+                  }`}
                 initial={{ y: 5, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
               >
@@ -198,6 +197,11 @@ export default function Home() {
                       ) : attachment.contentType?.startsWith("text") ? (
                         <div className="text-xs w-40 h-24 overflow-hidden text-zinc-400 border p-2 rounded-md dark:bg-zinc-800 dark:border-zinc-700 mb-3">
                           {getTextFromDataUrl(attachment.url)}
+                        </div>
+                      ) : attachment.contentType?.startsWith("application/") ? (
+                        <div className="text-xs w-40 h-24 overflow-hidden text-zinc-400 border p-2 rounded-md dark:bg-zinc-800 dark:border-zinc-700 mb-3">
+                          {attachment.name}
+                          {/* {getTextFromDataUrl(attachment.url)} */}
                         </div>
                       ) : null
                     )}
@@ -293,6 +297,22 @@ export default function Home() {
                     >
                       <TextFilePreview file={file} />
                     </motion.div>
+                  ) : file.type.startsWith("application/") ? (
+                    <motion.div
+                      key={file.name}
+                      className="text-[8px] leading-1 w-28 h-16 overflow-hidden text-zinc-500 border p-2 rounded-lg bg-white dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400"
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{
+                        y: -10,
+                        scale: 1.1,
+                        opacity: 0,
+                        transition: { duration: 0.2 },
+                      }}
+                    >
+                      {file.name}
+                      {/* <TextFilePreview file={file} /> */}
+                    </motion.div>
                   ) : null
                 )}
               </div>
@@ -303,7 +323,7 @@ export default function Home() {
           <input
             type="file"
             multiple
-            accept="image/*,text/*"
+            accept="image/*,text/*,application/*"
             ref={fileInputRef}
             className="hidden"
             onChange={handleFileChange}

@@ -28,7 +28,8 @@ Start by adding the necessary imports & the `"use server"` directive:
 ```typescript
 "use server";
 
-import { ChatOpenAI } from "@langchain/openai";
+// import { ChatOpenAI } from "@langchain/openai";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { createStreamableValue } from "ai/rsc";
 import { z } from "zod";

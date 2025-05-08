@@ -3,7 +3,8 @@ import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 import { createClient } from "@supabase/supabase-js";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import { OpenAIEmbeddings } from "@langchain/openai";
+// import { OpenAIEmbeddings } from "@langchain/openai";
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 
 export const runtime = "edge";
 
@@ -34,6 +35,8 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    console.log(process.env.SUPABASE_URL);
+
     const client = createClient(
       process.env.SUPABASE_URL!,
       process.env.SUPABASE_PRIVATE_KEY!,
@@ -46,18 +49,39 @@ export async function POST(req: NextRequest) {
 
     const splitDocuments = await splitter.createDocuments([text]);
 
-    const vectorstore = await SupabaseVectorStore.fromDocuments(
-      splitDocuments,
-      new OpenAIEmbeddings(),
-      {
-        client,
-        tableName: "documents",
-        queryName: "match_documents",
-      },
-    );
+
+    const embeddings = new GoogleGenerativeAIEmbeddings({
+      // apiKey: "<YOUR API KEY>",
+      modelName: "embedding-001",
+    });
+    // // Embed a single query
+    // const res = await model.embedQuery(
+    //   "What would be a good company name for a company that makes colorful socks?"
+    // );
+    // console.log({ res });
+
+    // const vectorstore = await SupabaseVectorStore.fromDocuments(
+    //   splitDocuments,
+    //   // new OpenAIEmbeddings(),
+    //   // new GoogleGenerativeAIEmbeddings({ model: "text-embedding-004" }),
+    //   model,
+    //   {
+    //     client,
+    //     tableName: "documents",
+    //     queryName: "match_documents",
+    //   },
+    // );
+    const vectorStore = new SupabaseVectorStore(embeddings, {
+      client,
+      tableName: "documents",
+      queryName: "match_documents",
+    });
+    await vectorStore.addDocuments(splitDocuments);
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (e: any) {
+    console.log(e);
+
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
