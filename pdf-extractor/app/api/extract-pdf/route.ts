@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import pdfParse from "pdf-parse"
 import { PDFIO } from "pdf-io";
+import pdfToText from "react-pdftotext";
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +19,8 @@ export async function POST(request: NextRequest) {
     // Extract text using pdf-parse
     let text
     try {
-      text = await extractTextFromPdf(buffer)
+      // text = await extractTextFromPdf(buffer)
+      text = await extractText('http://localhost:3000/test.pdf')
     } catch (error) {
       console.error("Text extraction error:", error)
       text = "Failed to extract text. Error: " + (error instanceof Error ? error.message : String(error))
@@ -61,6 +63,24 @@ async function extractTextFromPdf(buffer: Buffer): Promise<string> {
   try {
     const data = await pdfParse(buffer)
     return data.text || "No text content found in the PDF."
+  } catch (error) {
+    console.error("Error extracting text:", error)
+    throw new Error(`Text extraction failed: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
+
+async function extractText(pdf_url: string) {
+  // const file = event.target.files[0];
+  // pdfToText(file)
+  //   .then((text) => console.log(text))
+  //   .catch((error) => console.error("Failed to extract text from pdf"));
+
+  try {
+    const file = await fetch(pdf_url)
+      .then(res => res.blob())
+      .catch(error => console.error(error))
+    const text = await pdfToText(file!)
+    return text || "No text content found in the PDF."
   } catch (error) {
     console.error("Error extracting text:", error)
     throw new Error(`Text extraction failed: ${error instanceof Error ? error.message : String(error)}`)

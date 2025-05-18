@@ -7,7 +7,7 @@ import {
   UserIcon,
   VercelIcon,
 } from "@/components/icons";
-import { useChat } from "ai/react";
+import { useChat } from '@ai-sdk/react';
 import { DragEvent, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
@@ -40,7 +40,7 @@ function TextFilePreview({ file }: { file: File }) {
 }
 
 export default function Home() {
-  const { messages, input, handleSubmit, handleInputChange, isLoading } =
+  const { messages, input, handleSubmit, handleInputChange, status } =
     useChat({
       onError: () =>
         toast.error("You've been rate limited, please try again later!"),
@@ -153,7 +153,7 @@ export default function Home() {
       <AnimatePresence>
         {isDragging && (
           <motion.div
-            className="fixed pointer-events-none dark:bg-zinc-900/90 h-dvh w-dvw z-10 flex flex-row justify-center items-center flex flex-col gap-1 bg-zinc-100/90"
+            className="fixed pointer-events-none dark:bg-zinc-900/90 h-dvh w-dvw z-10 flex justify-center items-center gap-1 bg-zinc-100/90"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -210,7 +210,9 @@ export default function Home() {
               </motion.div>
             ))}
 
-            {isLoading &&
+            {status === 'submitted' &&
+              messages.length > 0 &&
+              // messages[messages.length - 1].role === 'user' &&
               messages[messages.length - 1].role !== "assistant" && (
                 <div className="flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0">
                   <div className="size-[24px] flex flex-col justify-center items-center flex-shrink-0 text-zinc-400">

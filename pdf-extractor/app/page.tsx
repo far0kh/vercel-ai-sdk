@@ -82,6 +82,14 @@ export default function Home() {
         method: "POST",
         body: formData,
       })
+      // console.log("file", file);
+
+      // const response = await fetch(`/api/extract-pdf-new`, {
+      //   method: 'POST',
+      //   body: JSON.stringify({
+      //     file
+      //   }),
+      // });
 
       const data = await response.json()
 
